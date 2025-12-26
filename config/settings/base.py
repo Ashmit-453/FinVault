@@ -14,6 +14,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv,path
 from loguru import logger
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "core_apps"
@@ -155,6 +156,37 @@ STATIC_ROOT = str(BASE_DIR / 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = "user_auth.User"
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
+    "PAGE_SIZE": 10,
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "50/day",
+        "user": "100/day",
+    },
+}
+SPECTACULAR_SETTINGS = {
+    "TITLE": "FinVault Bank API",
+    "DESCRIPTION": "An API built for a banking system",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "LICENSE": {
+        "name": "MIT License",
+        "url": "https://opensource.org/license/mit",
+    },
+}
 LOGGING_CONFIG = None
 
 LOGURU_LOGGING = {
