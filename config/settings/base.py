@@ -182,6 +182,29 @@ REST_FRAMEWORK = {
         "user": "100/day",
     },
 }
+SIMPLE_JWT = {
+    "SIGNING_KEY": getenv("SIGNING_KEY"),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+}
+
+DJOSER = {
+    "USER_ID_FIELD": "id",
+    "LOGIN_FIELD": "email",
+    "TOKEN_MODEL": None,
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "SEND_ACTIVATION_EMAIL": True,
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "password-reset/{uid}/{token}",
+    "SERIALIZERS": {
+        "user_create": "core_apps.user_auth.serializers.UserCreateSerializer",
+    },
+}
 SPECTACULAR_SETTINGS = {
     "TITLE": "FinVault Bank API",
     "DESCRIPTION": "An API built for a banking system",
@@ -219,6 +242,16 @@ cloudinary.config(
     api_key=CLOUDINARY_API_KEY,
     api_secret=CLOUDINARY_API_SECRET,
 )
+COOKIE_NAME = "access"
+
+COOKIE_SAMESITE = "Lax"
+
+COOKIE_PATH = "/"
+
+COOKIE_HTTPONLY = True
+
+COOKIE_SECURE = getenv("COOKIE_SECURE", "True") == "True"
+
 LOGGING_CONFIG = None
 
 LOGURU_LOGGING = {
