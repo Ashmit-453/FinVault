@@ -5,6 +5,7 @@ from django.utils import timezone
 from rest_framework import generics, status, serializers
 from rest_framework.request import Request
 from rest_framework.response import Response
+from .tasks import generate_transaction_pdf
 from core_apps.common.permissions import IsAccountExecutive, IsTeller
 from core_apps.common.renderers import GenericJSONRenderer
 from .emails import (
