@@ -18,6 +18,8 @@ from core_apps.common.renderers import GenericJSONRenderer
 from .models import NextOfKin, Profile
 from .serializers import NextOfKinSerializer, ProfileListSerializer, ProfileSerializer
 from rest_framework.permissions import AllowAny
+from core_apps.accounts.utils import create_bank_account
+from core_apps.accounts.models import BankAccount
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -82,7 +84,61 @@ class ProfileDetailAPIView(generics.RetrieveUpdateAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+    def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
 
+        try:
+            serializer.is_valid(raise_exception=True)
+            with transaction.atomic():
+                updated_instance = serializer.save()
+
+                if updated_instance.is_complete_with_next_of_kin():
+                    existing_account = BankAccount.objects.filter(
+                        user=request.user,
+                        currency=updated_instance.account_currency,
+                        account_type=updated_instance.account_type,
+                    ).first()
+
+                    if not existing_account:
+                        bank_account = create_bank_account(
+                            request.user,
+                            currency=updated_instance.account_currency,
+                            account_type=updated_instance.account_type,
+                        )
+                        message = (
+                            "Profile updated and new bank account created successfully. An email "
+                            "has been sent to you with further instructions"
+                        )
+                    else:
+                        message = (
+                            "Profile updated successfully. No new account created as one already "
+                            "exists for this currency and type."
+                        )
+                    return Response(
+                        {
+                            "message": message,
+                            "data": serializer.data,
+                        },
+                        status=status.HTTP_200_OK,
+                    )
+                else:
+                    return Response(
+                        {
+                            "message": "Profile updated successfully. Please complete all "
+                            "required fields and at least one next of kin to create a "
+                            "bank account.",
+                            "data": serializer.data,
+                        },
+                        status=status.HTTP_200_OK,
+                    )
+
+        except serializers.ValidationError as e:
+            return Response({"errors": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     def partial_update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         kwargs["partial"] = True
         return self.update(request, *args, **kwargs)
