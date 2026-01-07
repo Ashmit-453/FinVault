@@ -21,8 +21,8 @@ class BankAccount(TimeStampedModel):
 
     class AccountCurrency(models.TextChoices):
         DOLLAR = ("us_dollar", _("US Dollar"))
-        POUND_STERLING = ("pound_sterling", _("Pound Sterling"))
-        KENYA_SHILLING = ("kenya_shilling", _("Kenya Shilling"))
+        EURO = ("euro", _("Euro"))
+        RUPEE = ("INR", _("INR"))
 
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="bank_accounts"

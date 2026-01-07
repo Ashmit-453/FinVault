@@ -33,3 +33,6 @@ network-inspect:
 
 banker-db:
 	docker compose -f local.yml exec postgres psql --username=postgres --dbname=banker
+
+
+	

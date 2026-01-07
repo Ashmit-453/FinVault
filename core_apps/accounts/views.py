@@ -557,7 +557,7 @@ class TransactionPDFView(APIView):
         return Response(
             {
                 "message": "Your Transaction history PDF is being generated and will be sent to "
-                "your email shortly",
+                "your email in few minutes",
                 "email": user.email,
             },
             status=status.HTTP_202_ACCEPTED,
