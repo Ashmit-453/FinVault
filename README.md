@@ -11,6 +11,8 @@
 FinVault is a **production-grade digital banking backend** built with Django and DRF. It supports KYC verification, secure transactions, asynchronous operations, and is fully containerized for modern deployment.
 
 ---
+## 🖥️ System Design
+<img width="7698" height="5786" alt="System Architecture" src="https://github.com/user-attachments/assets/fa4bcbae-360d-4318-a642-e97ac610a033" />
 
 ## 🌟 Features
 
@@ -108,13 +110,6 @@ Stop all running Docker containers while preserving your database data in Docker
 - Configure **NGINX** as a reverse proxy  
 - Use **Docker Compose** for multi-service deployment  
 - Recommended: HTTPS via Let's Encrypt  
-
----
-
-
-## 📝 License
-
-MIT License © [Ashmit Pandey](https://github.com/ashmit-453)
 
 ---
 
