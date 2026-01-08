@@ -121,4 +121,4 @@ MIT License © [Ashmit Pandey](https://github.com/ashmit-453)
 ## 👨‍💻 Author
 
 **Ashmit Pandey** — Backend Developer  
-[GitHub](https://github.com/ashmit-453) | [LinkedIn](https://linkedin.com/in/yourprofile)
+[GitHub](https://github.com/ashmit-453) | [LinkedIn](https://www.linkedin.com/in/ashmit-pandey/)
